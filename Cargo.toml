@@ -1,0 +1,11 @@
+[package]
+name = "launchctl"
+version = "0.1.0"
+edition = "2021"
+authors = ["Sylvan Franklin"]
+description = "A lightweight hotkey daemon for MacOS"
+repository = "https://github.com/sylvanfranklin/launchctl"
+keywords = ["system", "MacOS" , "service", "launcher"]
+license = "MIT"
+
+[dependencies]
