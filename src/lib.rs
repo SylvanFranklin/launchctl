@@ -1,9 +1,4 @@
-use std::{
-    fs,
-    io::Error,
-    path::PathBuf,
-    process::Command,
-};
+use std::{fs, io::Error, path::PathBuf, process::Command};
 
 /// Wrapper for the launchctl system command to manage services
 /// for more information about services on mac see https://ss64.com/mac/launchctl.html
@@ -51,38 +46,6 @@ impl Service {
         self.start()
     }
 
-    fn cmd(&self) -> Command {
-        // This makes an assumption that launchctl will always be in /bin
-        // it also takes self in case this needs to be changed
-        let mut command = Command::new("/bin/launchctl");
-        command
-            .stdout(std::process::Stdio::null())
-            .stderr(std::process::Stdio::null());
-
-        return command;
-    }
-
-    /// checks if the log files exist, if not, creates them
-    fn create_log_files(&self) -> Result<(), Error> {
-        if !fs::metadata(&self.error_log_path).is_ok() {
-            fs::write(&self.error_log_path, "")?;
-        }
-
-        if !fs::metadata(&self.out_log_path).is_ok() {
-            fs::write(&self.out_log_path, "")?;
-        }
-
-        Ok(())
-    }
-
-    fn is_bootstrapped(&self) -> bool {
-        self.cmd()
-            .args(vec!["print", &self.service_target])
-            .status()
-            .unwrap_or_else(|_| panic!("Failed to check bootstrap for: {}", &self.name))
-            .success()
-    }
-
     /// Attemps to stop the service
     pub fn stop(&self) -> Result<(), Error> {
         if !self.is_bootstrapped() {
@@ -122,19 +85,35 @@ impl Service {
 
         Ok(())
     }
-}
+    fn cmd(&self) -> Command {
+        // This makes an assumption that launchctl will always be in /bin
+        // it also takes self in case this needs to be changed
+        let mut command = Command::new("/bin/launchctl");
+        command
+            .stdout(std::process::Stdio::null())
+            .stderr(std::process::Stdio::null());
 
-pub fn add(left: u64, right: u64) -> u64 {
-    left + right
-}
+        return command;
+    }
 
-#[cfg(test)]
-mod tests {
-    use super::*;
+    /// checks if the log files exist, if not, creates them
+    fn create_log_files(&self) -> Result<(), Error> {
+        if !fs::metadata(&self.error_log_path).is_ok() {
+            fs::write(&self.error_log_path, "")?;
+        }
 
-    #[test]
-    fn it_works() {
-        let result = add(2, 2);
-        assert_eq!(result, 4);
+        if !fs::metadata(&self.out_log_path).is_ok() {
+            fs::write(&self.out_log_path, "")?;
+        }
+
+        Ok(())
+    }
+
+    fn is_bootstrapped(&self) -> bool {
+        self.cmd()
+            .args(vec!["print", &self.service_target])
+            .status()
+            .unwrap_or_else(|_| panic!("Failed to check bootstrap for: {}", &self.name))
+            .success()
     }
 }
