@@ -85,6 +85,7 @@ impl Service {
 
         Ok(())
     }
+    
     fn cmd(&self) -> Command {
         // This makes an assumption that launchctl will always be in /bin
         // it also takes self in case this needs to be changed
