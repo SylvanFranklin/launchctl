@@ -17,7 +17,7 @@ strings.
 ```rust
 fn main() {
     // basic construction of a service
-    let basic = Service::new("com.<owner>.<binary>".to_string(), PathBuf::from("/bin/ls"));
+    let basic = Service::new("com.<owner>.<binary>", PathBuf::from("/bin/ls"));
 
     // more advanced construction of a service
     let custom = Service {
@@ -40,9 +40,9 @@ fn main() {
 ```
 
 ### Installation
+```sh
 
-```cargo add launchctl```
+cargo add launchctl
 
-
-
+```
 
