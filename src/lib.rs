@@ -29,12 +29,13 @@ impl Service {
     /// for a more custom setup use construct the struct directly
     pub fn new(name: &str, bin_path: PathBuf) -> Self {
         // for now saying that uid is always 501
+        let home = std::env::var("HOME").expect("$HOME not set aborting.");
         Service {
             domain_target: "gui/501".to_string(),
             service_target: format!("gui/501/{}", &name),
             uid: "501".to_string(),
             bin_path,
-            plist_path: format!("/Library/LaunchAgents/{}.plist", &name),
+            plist_path: format!("{}/Library/LaunchAgents/{}.plist", &home, &name),
             error_log_path: format!("/tmp/{}_{}.err.log", &name, &"501"),
             out_log_path: format!("/tmp/{}_{}.out.log", &name, &"501"),
             name: name.to_string(),
