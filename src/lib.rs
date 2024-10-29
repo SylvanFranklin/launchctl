@@ -27,7 +27,7 @@ pub struct Service {
 impl Service {
     /// Sets up all necessary variables for the service in a common use case
     /// for a more custom setup use construct the struct directly
-    pub fn new(name: String, bin_path: PathBuf) -> Self {
+    pub fn new(name: &str, bin_path: PathBuf) -> Self {
         // for now saying that uid is always 501
         Service {
             domain_target: "gui/501".to_string(),
@@ -37,7 +37,7 @@ impl Service {
             plist_path: format!("/Library/LaunchAgents/{}.plist", &name),
             error_log_path: format!("/tmp/{}_{}.err.log", &name, &"501"),
             out_log_path: format!("/tmp/{}_{}.out.log", &name, &"501"),
-            name,
+            name: name.to_string(),
         }
     }
 
@@ -85,7 +85,7 @@ impl Service {
 
         Ok(())
     }
-    
+
     fn cmd(&self) -> Command {
         // This makes an assumption that launchctl will always be in /bin
         // it also takes self in case this needs to be changed
