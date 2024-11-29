@@ -6,7 +6,7 @@ is specifically for MacOS. For more info about `launchctl` and `launchd` see
 the [official apple docs](https://ss64.com/mac/launchctl.html).
 
 > [!TIP]
-> `launchctl` is the best way to make lightweight daemons, use this crate to throw up background jobs with ease!
+> `launchctl` is the best way to make lightweight daemons, use this crate to throw up background jobs with ease! When combined with cli options it is easy and safe to stop and start jobs. 
 
 ### Limitations
 Currently this crate does not support creating or modifying plist files. There
