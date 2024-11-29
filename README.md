@@ -14,7 +14,7 @@ are other crates that can give you this behavior, or you can hard code them as
 strings which is what I prefer. 
 
 ### Usage
-The Service struct is the main entrypoint of this library.   
+The Service struct is the main entrypoint of this library.
 ```rust
 fn main() {
     // basic construction of a service
@@ -36,14 +36,14 @@ fn main() {
     // ...
 
     basic.start().unwrap();
+    custom.start().unwrap();
 }
 
 ```
 
 ### Installation
+For the latest version:
 ```sh
-
 cargo add launchctl
 
 ```
-
