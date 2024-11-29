@@ -1,19 +1,20 @@
 # Launchctl
 Tiny Rust wrapper library for MacOS service launcher `launchctl`. This library
 offers a more intuitive interface for managing services on MacOS. Other Rust
-crates exist for interfacing with cross platform launch services, I just wanted
-one that zeroed in on MacOS. For more info about `launchctl` and `launchd` see
+crates exist for interfacing with cross platform launch services. This library 
+is specifically for MacOS. For more info about `launchctl` and `launchd` see
 the [official apple docs](https://ss64.com/mac/launchctl.html).
+
+> [!TIP]
+> `launchctl` is the best way to make lightweight daemons, use this crate to throw up background jobs with ease!
 
 ### Limitations
 Currently this crate does not support creating or modifying plist files. There
 are other crates that can give you this behavior, or you can hard code them as
-strings. 
-
+strings which is what I prefer. 
 
 ### Usage
-(see docs.rs for more info)
-
+The Service struct is the main entrypoint of this library.   
 ```rust
 fn main() {
     // basic construction of a service
