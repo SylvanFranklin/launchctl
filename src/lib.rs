@@ -1,53 +1,46 @@
-use std::{fs, io::Error, path::PathBuf, process::Command};
+use bon::Builder;
+use std::{fs, io::Error, process::Command};
 
-/// Wrapper for the launchctl system command to manage services
+#[cfg(test)]
+mod tests;
+
+/// Wrapper for the launchctl
 /// for more information about services on mac see https://ss64.com/mac/launchctl.html
 #[derive(Debug)]
 #[allow(dead_code)]
-pub struct Service {
+#[derive(Builder)]
+struct Service {
     /// Name of the service typically (com.<owner>.<bin name>)
-    pub name: String,
-    /// The target of the domain (gui/<uid>)
-    pub domain_target: String,
-    /// The target of the service (gui/<uid>/<service name>)
-    pub service_target: String,
+    #[builder(into)]
+    name: String,
     /// id of logged in user typically 501
-    pub uid: String,
-    /// Path to the binary that will be launched
-    pub bin_path: PathBuf,
+    #[builder(into, default = "501")]
+    uid: String,
+    /// The target of the domain (gui/<uid>)
+    #[builder(into, default = format!("gui/{}", uid))]
+    domain_target: String,
+    /// The target of the service (gui/<uid>/<service name>)
+    #[builder(into, default = format!("{}/{}", domain_target, name))]
+    service_target: String,
     /// Path to the plist file typically ~/Library/LaunchAgents/<service name>.plist
-    pub plist_path: String,
+    #[builder(into, default = format!("~/Library/LaunchAgents/{}.plist", name))]
+    plist_path: String,
     /// Path to the error log file default (/tmp/<bin name>_<user>.err.log)
-    pub error_log_path: String,
+    #[builder(into, default = format!("/tmp/{}_{}.err.log", name, uid))]
+    error_log_path: String,
     /// Path to the out log file default (/tmp/<bin name>_<user>.out.log)
-    pub out_log_path: String,
+    #[builder(into, default = format!("/tmp/{}_{}.out.log", name, uid))]
+    out_log_path: String,
 }
 
 #[allow(dead_code)]
 impl Service {
-    /// Sets up all necessary variables for the service in a common use case
-    /// for a more custom setup use construct the struct directly
-    pub fn new(name: &str, bin_path: PathBuf) -> Self {
-        // for now saying that uid is always 501
-        let home = std::env::var("HOME").expect("$HOME not set aborting.");
-        Service {
-            domain_target: "gui/501".to_string(),
-            service_target: format!("gui/501/{}", &name),
-            uid: "501".to_string(),
-            bin_path,
-            plist_path: format!("{}/Library/LaunchAgents/{}.plist", &home, &name),
-            error_log_path: format!("/tmp/{}_{}.err.log", &name, &"501"),
-            out_log_path: format!("/tmp/{}_{}.out.log", &name, &"501"),
-            name: name.to_string(),
-        }
-    }
-
     pub fn restart(&self) -> Result<(), Error> {
         self.stop()?;
         self.start()
     }
 
-    /// Attemps to stop the service
+    /// Attempts to stop the service
     pub fn stop(&self) -> Result<(), Error> {
         if !self.is_bootstrapped() {
             // in this case we just try to kill the service just in case it is running
@@ -65,7 +58,7 @@ impl Service {
         Ok(())
     }
 
-    /// Attemps to start the service
+    /// Attempts to start the service
     pub fn start(&self) -> Result<(), Error> {
         self.create_log_files()?;
 
