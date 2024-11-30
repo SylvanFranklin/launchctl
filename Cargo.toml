@@ -9,3 +9,4 @@ keywords = ["system", "MacOS", "service", "launcher"]
 license = "MIT"
 
 [dependencies]
+bon = "3.1.1"
