@@ -1,6 +1,6 @@
 [package]
 name = "launchctl"
-version = "0.3.1"
+version = "0.3.2"
 edition = "2021"
 authors = ["Sylvan Franklin"]
 description = "A simple library for managing system services on MacOS"

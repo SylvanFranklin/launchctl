@@ -9,28 +9,28 @@ mod tests;
 #[derive(Debug)]
 #[allow(dead_code)]
 #[derive(Builder)]
-struct Service {
+pub struct Service {
     /// Name of the service typically (com.<owner>.<bin name>)
     #[builder(into)]
-    name: String,
+    pub name: String,
     /// id of logged in user typically 501
     #[builder(into, default = "501")]
-    uid: String,
+    pub uid: String,
     /// The target of the domain (gui/<uid>)
     #[builder(into, default = format!("gui/{}", uid))]
-    domain_target: String,
+    pub domain_target: String,
     /// The target of the service (gui/<uid>/<service name>)
     #[builder(into, default = format!("{}/{}", domain_target, name))]
-    service_target: String,
+    pub service_target: String,
     /// Path to the plist file typically ~/Library/LaunchAgents/<service name>.plist
     #[builder(into, default = format!("~/Library/LaunchAgents/{}.plist", name))]
-    plist_path: String,
+    pub plist_path: String,
     /// Path to the error log file default (/tmp/<bin name>_<user>.err.log)
     #[builder(into, default = format!("/tmp/{}_{}.err.log", name, uid))]
-    error_log_path: String,
+    pub error_log_path: String,
     /// Path to the out log file default (/tmp/<bin name>_<user>.out.log)
     #[builder(into, default = format!("/tmp/{}_{}.out.log", name, uid))]
-    out_log_path: String,
+    pub out_log_path: String,
 }
 
 #[allow(dead_code)]
