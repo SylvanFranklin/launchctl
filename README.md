@@ -5,18 +5,15 @@ crates exist for interfacing with cross platform launch services. This library
 is specifically for MacOS. For more info about `launchctl` and `launchd` see
 the [official apple docs](https://ss64.com/mac/launchctl.html).
 
+### Install
 ```sh
 cargo add launchctl
-
 ```
-
-> [!TIP]
-> `launchctl` is the best way to make lightweight daemons, use this crate to throw up background jobs with ease! When combined with cli options it is easy and safe to stop and start jobs. 
-
-```
+> [!NOTE]
+> Coming soon is a CLI version which will make it easier to automate creating a service.
 
 ### Usage
-The Service struct is the main entrypoint of this library. It uses a `bon` builder.
+The Service struct is the main entry point of this library. It uses a `bon` builder.
 ```rust
 fn main() {
     // basic construction of a service
