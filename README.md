@@ -5,45 +5,90 @@ crates exist for interfacing with cross platform launch services. This library
 is specifically for MacOS. For more info about `launchctl` and `launchd` see
 the [official apple docs](https://ss64.com/mac/launchctl.html).
 
+```sh
+cargo add launchctl
+
+```
+
 > [!TIP]
 > `launchctl` is the best way to make lightweight daemons, use this crate to throw up background jobs with ease! When combined with cli options it is easy and safe to stop and start jobs. 
 
-### Limitations
-Currently this crate does not support creating or modifying plist files. There
-are other crates that can give you this behavior, or you can hard code them as
-strings which is what I prefer. 
+```
 
 ### Usage
-The Service struct is the main entrypoint of this library.
+The Service struct is the main entrypoint of this library. It uses a `bon` builder.
 ```rust
 fn main() {
     // basic construction of a service
-    let basic = Service::new("com.<owner>.<binary>", PathBuf::from("/bin/ls"));
+    let basic_service = Service::builder()
+        .name("com.<owner name>.<binary name>")
+        .build();
 
     // more advanced construction of a service
-    let custom = Service {
-        name: "com.<owner>.<binary>".to_string(),
-        domain_target: "gui/501".to_string(),
-        service_target: "gui/501/com.<owner>.<binary>".to_string(),
-        uid: "501".to_string(),
-        bin_path: "/bin/ls".into(),
-        plist_path: "/Library/LaunchAgents/com.<owner>.<binary>.plist".to_string(),
-        error_log_path: "/tmp/<binary>_<user>.err.log".to_string(),
-        out_log_path: "/tmp/<binary>_<user>.out.log".to_string(),
-    };
+    let more_custom = Service::builder()
+        .name("com.<owner name>.<binary name>")
+        .
+        .build();
 
     // create a .plist file for the service
     // ...
 
     basic.start().unwrap();
-    custom.start().unwrap();
+    custom.stop().unwrap();
 }
 
 ```
 
-### Installation
-For the latest version:
-```sh
-cargo add launchctl
+### Limitations
+Currently this crate does not support creating or modifying plist files. There
+are other crates that can give you this behavior
+[https://github.com/koenichiwa/launchd](), or you can hard code them as strings
+which is what I prefer. 
 
+Here is an example of how I do that in my [srhd](https://github.com/sylvanfranklin/srhd) crate.
+
+```rs
+pub fn install(ctl: &launchctl::Service) -> Result<(), Error> {
+    let plist = format!(
+"<?xml version=\"1.0\" encoding=\"UTF-8\"?>
+<!DOCTYPE plist PUBLIC \"-//Apple Computer//DTD PLIST 1.0//EN\" \"http://www.apple.com/DTDs/PropertyList-1.0.dtd\">
+<plist version=\"1.0\">
+<dict>
+    <key>Label</key>
+    <string>{}</string>
+    <key>ProgramArguments</key>
+    <array>
+        <string>{}</string>
+    </array>
+    <key>RunAtLoad</key>
+    <true/>
+        <key>KeepAlive</key>
+    <dict>
+        <key>SuccessfulExit</key>
+ 	     <false/>
+ 	     <key>Crashed</key>
+ 	     <true/>
+    </dict>
+    <key>StandardOutPath</key>
+    <string>/tmp/srhd_sylvanfranklin.out.log</string>
+    <key>StandardErrorPath</key>
+    <string>/tmp/srhd_sylvanfranklin.err.log</string>
+    <key>ProcessType</key>
+    <string>Interactive</string>
+    <key>Nice</key>
+    <integer>-20</integer>
+</dict>
+</plist>",
+        ctl.name,
+        ctl.bin_path.to_str().unwrap(),
+    );
+
+    Ok(fs::write(ctl.plist_path.clone(), plist)?)
+}
 ```
+
+# Contribution
+Bro I love when people contribute or even submit issues. It's good for
+everyone's career and understanding of everything, by all means open an issue or
+a PR!
+
