@@ -39,7 +39,7 @@ fn main() {
 ### Limitations
 Currently this crate does not support creating or modifying plist files. There
 are other crates that can give you this behavior
-[https://github.com/koenichiwa/launchd](), or you can hard code them as strings
+[https://github.com/koenichiwa/launchd](https://github.com/koenichiwa/launchd), or you can hard code them as strings
 which is what I prefer. 
 
 Here is an example of how I do that in my [srhd](https://github.com/sylvanfranklin/srhd) crate.
