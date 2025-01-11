@@ -4,6 +4,7 @@ use crate::Service;
 mod tests {
     use super::*;
 
+    // make these tests more comprehensive
     #[test]
     fn creation_basic() {
         let service = Service::builder()

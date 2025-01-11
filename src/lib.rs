@@ -35,6 +35,7 @@ pub struct Service {
 
 #[allow(dead_code)]
 impl Service {
+    /// Effectively the same as calling start and then stop
     pub fn restart(&self) -> Result<(), Error> {
         self.stop()?;
         self.start()
