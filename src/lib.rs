@@ -104,6 +104,8 @@ impl Service {
         Ok(())
     }
 
+    /// attempts to get the bootstrapped status of the service. Possibly can fail if permissions
+    /// are not adequate or the target domain is malformed.  
     fn is_bootstrapped(&self) -> bool {
         self.cmd()
             .args(vec!["print", &self.service_target])
