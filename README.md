@@ -1,6 +1,6 @@
 # Launchctl
 Tiny Rust wrapper library for MacOS service launcher `launchctl`. This library
-offers a more intuitive interface for managing services on MacOS, cuz I'm not finna syscall that confusing shi every time I want to start a service. Other Rust
+offers a more intuitive interface for managing services on MacOS, **cuz I'm not finna syscall that confusing shi every time I want to start a service**. Other Rust
 crates exist for interfacing with cross platform launch services. This library 
 is specifically for MacOS. For more info about `launchctl` and `launchd` see
 the [official apple docs](https://ss64.com/mac/launchctl.html).
